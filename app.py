@@ -104,7 +104,7 @@ if "dia" not in df.columns:
     st.stop()
 
 min_d, max_d = df["dia"].min().date(), df["dia"].max().date()
-ini_default = max_d
+ini_default = max(min_d, (pd.Timestamp(max_d) - pd.Timedelta(days=7)).date())
 fim_default = max_d
 periodo = st.sidebar.date_input("Período", (ini_default, fim_default), min_value=min_d, max_value=max_d)
 if isinstance(periodo, (list, tuple)) and len(periodo) == 2:
@@ -159,7 +159,7 @@ st.divider()
 #Top veículos NEG
 l1a, l1b = st.columns((2,1))
 
-gran = l1a.segmented_control("Granularidade", options=["Dia","Hora"], default="Hora")
+gran = l1a.segmented_control("Granularidade", options=["Dia","Hora"], default="Dia")
 suavizar = l1a.toggle("Suavizar curvas", value=True, help="Usa 'spline' para linhas mais suaves")
 mm_win = l1a.slider("Média móvel (dias)", 0, 14, 7, help="0 desativa a média móvel", key="mmwin")
 
